@@ -1,0 +1,8 @@
+# m h  dom mon dow   command
+# At 1 am run the task once every day.
+30 07 * * * DT=$(date '+\%Y-\%m-\%d') && /bin/bash /usr/local/exec_daily.sh >> /usr/local/data/exec_daily_${DT}.log 2>&1
+#
+# remove log files by date (older than 45 days)
+40 01 * * * find /usr/local/data/log/*.log -mtime +45 -type f -delete
+45 01 * * * find /usr/local/data/exec_daily_*.log -mtime +45 -type f -delete
+#

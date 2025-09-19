@@ -1,0 +1,9 @@
+services:
+  last-obs-task:
+    image: 'terrabrasilis/deter-last-obs-task:v1.0.0'
+    container_name: last-obs-task
+    restart: always
+    environment:
+      - "BASE_URL=http://150.163.2.139:8089/files"
+    volumes:
+      - '/home/andre/Projects/workspace-terrabrasilis2.0/deter-last-obs-ibama/data:/usr/local/data'
