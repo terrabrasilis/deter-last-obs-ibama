@@ -61,10 +61,16 @@ if bioma == 'Cerrado':
 assert bbox
 
 #sql para selecionar datai e dataf das semanas
-sql = "SELECT week, mmdd1, mmdd2, mes"
-sql += " FROM public.weeks"
-sql += " WHERE mes = '" + str(mes) + "'" 
-sql += " ORDER BY mmdd1 asc"
+sql=f"""
+WITH num_weeks AS (
+	SELECT SUBSTRING(MAX(data)::text,6,5) as wks
+	FROM public.cmask_week
+)
+SELECT week, mmdd1, mmdd2, mes
+	FROM public.weeks
+WHERE mmdd1 IN (SELECT wks FROM num_weeks) OR mes = '{str(mes)}'
+ORDER BY id ASC
+"""
 
 print(sql)
 
@@ -78,8 +84,15 @@ lista_tif_base = ""
 
 for campo in campos:
     week = campo[0]
-    datai = str(ano) + "-" + str(campo[1])
-    dataf = str(ano) + "-" + str(campo[2])
+    mes_week = int(campo[3])
+    if mes_week==12 and mes=='01':
+        datai = str(int(ano)-1) + "-" + str(campo[1])
+        dataf = str(int(ano)-1) + "-" + str(campo[2])
+    else:
+        datai = str(ano) + "-" + str(campo[1])
+        dataf = str(ano) + "-" + str(campo[2])
+    
+
     #print (week, datai, dataf)
 
     
