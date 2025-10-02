@@ -56,7 +56,7 @@ classes_nuvem = {
 }
 
 # obtem ultima data processada
-consulta = "SELECT max(data) FROM public.last_day_processed"
+consulta = "SELECT (data - INTERVAL '2 days')::date as data FROM public.last_day_processed order by data desc limit 1"
 
 cur = con.cursor()
 cur.execute(consulta)
