@@ -180,7 +180,7 @@ for campo in campos:
     
     
 os.system("rm  " + lista_tifnn + "")
-os.system("rm  " + lista_tif_base + "")
+# os.system("rm  " + lista_tif_base + "")
 
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")

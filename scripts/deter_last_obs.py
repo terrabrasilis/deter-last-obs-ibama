@@ -172,7 +172,7 @@ for row in rows:
             cur.execute(query)
             print ("1 )" + rastername ,'\n' + query ,'\n')
             con.commit()
-        except KeyError:
+        except (AssertionError, KeyError):
             pixelvalue = nuv_mesant + deltad
             query = "UPDATE " + tabledeter + " set last_obs = " + str(pixelvalue) + " WHERE id = " + id + ";"
             cur.execute(query)
