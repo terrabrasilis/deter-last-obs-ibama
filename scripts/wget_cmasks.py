@@ -161,34 +161,35 @@ for a_year_month in missing_year_month:
 
                 try:
                     file = 1
-                    myfile = requests.get(url=url) #, proxies=proxies)
-                    if myfile.ok:
-                        open(output_directory, 'wb').write(myfile.content)
-                    newfile =  output  + nometif
-                    os.rename(output_directory, newfile)
-                    #print (nometif + " ENCONTRADA \n \n")
-                    
-                    # cataloga imagem na tabela 
-                    tifname = nometif
-                    tif_split = tifname.split("_")
-                    #print(tif_split)
-                    sat = tif_split[0] + "_" + tif_split[1]
-                    sensor = tif_split[2]
-                    data = tif_split[3]
-                    pathrow = tif_split[4] + tif_split[5]
-                    
-                    try: # armazena imagem que foi feita download
-                        query = "INSERT INTO public.cmask_acervo (bioma, source, satellite, sensor, data, pathrow, processada)  VALUES ('" + bioma + "', '" + tifname + "', '" + sat + "', '" + sensor + "', '" + data + "', '" + pathrow + "', " + str(0) + ")"
-                        cur.execute(query)
-                        con.commit()
-                        print('inseriu ' + tifname )
-                    except Exception:
-                        print('tiff ja inserido ' + tifname )
-                        con.rollback()
-                    
-                    
-                except:
-                    file = 0
-                    #print (url + " nao encontrada \n \n")
+                    # do not download if file exists on local directory
+                    if not os.path.isfile(output_directory):
+                        myfile = requests.get(url=url) #, proxies=proxies)
+                        if myfile.ok:
+                            open(output_directory, 'wb').write(myfile.content)
+                        # newfile =  output + nometif
+                        # os.rename(output_directory, newfile)
+                        #print (nometif + " ENCONTRADA \n \n")
+                        
+                        # cataloga imagem na tabela 
+                        tifname = nometif
+                        tif_split = tifname.split("_")
+                        #print(tif_split)
+                        sat = tif_split[0] + "_" + tif_split[1]
+                        sensor = tif_split[2]
+                        data = tif_split[3]
+                        pathrow = tif_split[4] + tif_split[5]
+                        
+                        try: # armazena imagem que foi feita download
+                            query = "INSERT INTO public.cmask_acervo (bioma, source, satellite, sensor, data, pathrow, processada)  VALUES ('" + bioma + "', '" + tifname + "', '" + sat + "', '" + sensor + "', '" + data + "', '" + pathrow + "', " + str(0) + ")"
+                            cur.execute(query)
+                            con.commit()
+                            print('inseriu ' + tifname )
+                        except Exception:
+                            print('tiff ja inserido ' + tifname )
+                            con.rollback()
+                            
+                except Exception:
+                    print (f"URL: {url}")
+                    print (f"File: {output_directory}")
                 
 
